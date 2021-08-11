@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "target": "es2017",
     "module": "commonjs",
+    "outDir": "./build",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,

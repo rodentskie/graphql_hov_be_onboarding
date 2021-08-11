@@ -28,6 +28,8 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "nodemon src/index.ts",
+    "build": "npx rimraf build/ && prettier --write src/**/* && tsc",
+    "start": "node build/index",
     "test": "NODE_ENV=test TS_NODE_PROJECT=tsconfig.json mocha --config src/tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\""
   },
   "dependencies": {
