@@ -5,8 +5,8 @@ import { scalars } from '../scalars/index';
 import { types } from '../types/index';
 
 export const typeDefs = gql`
-  ${mutations}
-  ${query}
   ${scalars}
   ${types}
+  ${mutations}
+  ${query}
 `;

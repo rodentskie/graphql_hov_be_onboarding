@@ -7,8 +7,8 @@ export const types = gql`
 
   type Account implements Node {
     id: Binary!
-    firstname: String!
-    lastname: String!
+    firstName: String!
+    lastName: String!
     emailAddress: EmailAddress!
     createdAt: DateTime!
     updatedAt: DateTime!
