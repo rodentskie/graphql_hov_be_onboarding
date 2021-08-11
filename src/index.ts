@@ -5,6 +5,7 @@ import Koa from 'koa';
 import { dbConn } from './data/index';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { typeDefs } from './schema/typeDefs/index';
+import { HelloWorldResolver } from './resolvers/hello/index';
 dotenv.config();
 
 const app = new Koa();
@@ -12,6 +13,7 @@ const app = new Koa();
 const apolloServer = new ApolloServer({
   schema: makeExecutableSchema({
     typeDefs,
+    resolvers: [HelloWorldResolver],
   }),
   context: ({ ctx }) => {
     return ctx;
