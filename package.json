@@ -31,6 +31,7 @@
     "test": "NODE_ENV=test TS_NODE_PROJECT=tsconfig.json mocha --config src/tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\""
   },
   "dependencies": {
+    "@graphql-tools/schema": "^8.0.3",
     "apollo-server-koa": "^3.1.2",
     "bcrypt": "^5.0.1",
     "chai": "^4.3.4",

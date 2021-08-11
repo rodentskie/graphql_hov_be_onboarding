@@ -3,22 +3,27 @@ import { ApolloServer } from 'apollo-server-koa';
 import dotenv from 'dotenv';
 import Koa from 'koa';
 import { dbConn } from './data/index';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { typeDefs } from './schema/typeDefs/index';
 dotenv.config();
 
 const app = new Koa();
+
 const apolloServer = new ApolloServer({
-  // schema: await buildSchema({
-  //   resolvers: [HelloWorldResolver, Hobbies, PeopleResolver],
-  // }),
+  schema: makeExecutableSchema({
+    typeDefs,
+  }),
   context: ({ ctx }) => {
     return ctx;
   },
 });
 
-dbConn();
+(async () => {
+  await dbConn();
 
-apolloServer.start();
-apolloServer.applyMiddleware({ app });
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+})();
 
 const port = process.env.PORT || 5000;
 
