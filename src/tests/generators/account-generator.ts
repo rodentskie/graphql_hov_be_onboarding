@@ -1,18 +1,14 @@
 import { internet, name } from 'faker';
-
-interface SignUpInput {
-  emailAddress?: string;
-  firstName?: string;
-  lastName?: string;
-  password?: string;
-}
+import { SignUpInput } from '../../types/accounts-types';
 
 const dummyAccount = () => {
   const data: SignUpInput = {
-    firstName: name.firstName(),
-    lastName: name.lastName(),
-    emailAddress: internet.email(),
-    password: internet.password(),
+    input: {
+      firstName: name.firstName(),
+      lastName: name.lastName(),
+      emailAddress: internet.email(),
+      password: internet.password(),
+    },
   };
 
   return data;
