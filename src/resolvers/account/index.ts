@@ -4,15 +4,7 @@ import { encrypt } from '../../functions/secure-data';
 import { generateToken } from '../../functions/create-token';
 import BinaryResolver from '../../schema/scalars/customs/binary-scalar';
 import EmailAddressResolver from '../../schema/scalars/customs/email-scalar';
-
-interface SignUpInput {
-  input: {
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    password: string;
-  };
-}
+import { SignUpInput } from '../../types/accounts-types';
 
 export const AccountResolver = {
   Binary: BinaryResolver,
