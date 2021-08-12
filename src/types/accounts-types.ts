@@ -35,4 +35,8 @@ type Me = {
   };
 };
 
-export { SignUpInput, AuthenticateInput, Account, Me };
+interface PrivateContext {
+  data: Account;
+}
+
+export { SignUpInput, AuthenticateInput, Account, Me, PrivateContext };
