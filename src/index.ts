@@ -10,6 +10,7 @@ import {
   AccountResolver,
   ProductResolver,
   ScalarResolver,
+  NodeResolver,
 } from './resolvers/index';
 dotenv.config();
 import isPrivateDirective from './private/index';
@@ -24,6 +25,7 @@ const apolloServer = new ApolloServer({
       HelloWorldResolver,
       AccountResolver,
       ScalarResolver,
+      NodeResolver,
     ],
     schemaDirectives: {
       private: isPrivateDirective,
