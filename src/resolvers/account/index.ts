@@ -5,6 +5,7 @@ import { generateToken } from '../../functions/create-token';
 import { UserInputError } from 'apollo-server-errors';
 
 import { SignUpInput, AuthenticateInput } from '../../types/accounts-types';
+import { Account, PrivateContext } from '../../types/accounts-types';
 
 export const AccountResolver = {
   Mutation: {
@@ -51,5 +52,8 @@ export const AccountResolver = {
 
       return { token };
     },
+  },
+  Query: {
+    me: (_: never, {}, ctx: PrivateContext): Account => ctx.data,
   },
 };

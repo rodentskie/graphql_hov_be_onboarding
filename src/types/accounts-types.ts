@@ -24,4 +24,19 @@ type Account = {
   updatedAt: Date;
 };
 
-export { SignUpInput, AuthenticateInput, Account };
+type Me = {
+  data: {
+    id: Buffer;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+
+interface PrivateContext {
+  data: Account;
+}
+
+export { SignUpInput, AuthenticateInput, Account, Me, PrivateContext };
