@@ -12,16 +12,13 @@ export const ProductResolver = {
       const id = generateId(EntityType.Product);
       const cursor = Buffer.concat([Buffer.from(name), Buffer.from(id)]);
 
-      const user: Account = ctx.user.data;
-      const userId = user.id;
-      const { firstName, lastName, emailAddress, createdAt, updatedAt } = user;
-      const owner = Buffer.from(userId);
+      const user: Account = ctx.data;
 
       const req = await ProductModel.create({
         id,
         name,
         description,
-        owner,
+        owner: user.id,
         cursor,
       });
 
@@ -32,12 +29,7 @@ export const ProductResolver = {
         createdAt: req.createdAt,
         updatedAt: req.updatedAt,
         owner: {
-          id: owner,
-          firstName,
-          lastName,
-          emailAddress,
-          createdAt,
-          updatedAt,
+          ...user,
         },
       };
       return product;
