@@ -3,14 +3,10 @@ import AccountModel from '../../models/accounts';
 import { encrypt, compareData } from '../../functions/secure-data';
 import { generateToken } from '../../functions/create-token';
 import { UserInputError } from 'apollo-server-errors';
-import BinaryResolver from '../../schema/scalars/customs/binary-scalar';
-import EmailAddressResolver from '../../schema/scalars/customs/email-scalar';
+
 import { SignUpInput, AuthenticateInput } from '../../types/accounts-types';
 
 export const AccountResolver = {
-  Binary: BinaryResolver,
-  EmailAddress: EmailAddressResolver,
-
   Mutation: {
     signUp: async (_: never, data: SignUpInput) => {
       const { input } = data;

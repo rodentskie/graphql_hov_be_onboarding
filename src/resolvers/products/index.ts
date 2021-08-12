@@ -1,13 +1,10 @@
 import { generateId, EntityType } from '../../functions/generate-binary-id';
-import BinaryResolver from '../../schema/scalars/customs/binary-scalar';
 import { CreateProductInput } from '../../types/products-types';
 import ProductModel from '../../models/products';
 import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
 
 export const ProductResolver = {
-  Binary: BinaryResolver,
-
   Mutation: {
     createProduct: async (_: never, data: CreateProductInput, ctx: Context) => {
       const { input } = data;

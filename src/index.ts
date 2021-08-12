@@ -9,6 +9,7 @@ import {
   HelloWorldResolver,
   AccountResolver,
   ProductResolver,
+  ScalarResolver,
 } from './resolvers/index';
 dotenv.config();
 import isPrivateDirective from './private/index';
@@ -18,7 +19,12 @@ const app = new Koa();
 const apolloServer = new ApolloServer({
   schema: makeExecutableSchema({
     typeDefs,
-    resolvers: [ProductResolver, HelloWorldResolver, AccountResolver],
+    resolvers: [
+      ProductResolver,
+      HelloWorldResolver,
+      AccountResolver,
+      ScalarResolver,
+    ],
     schemaDirectives: {
       private: isPrivateDirective,
     },
