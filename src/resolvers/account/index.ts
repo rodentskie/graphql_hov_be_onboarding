@@ -5,6 +5,7 @@ import { generateToken } from '../../functions/create-token';
 import BinaryResolver from '../../schema/scalars/customs/binary-scalar';
 import EmailAddressResolver from '../../schema/scalars/customs/email-scalar';
 import { SignUpInput } from '../../types/accounts-types';
+import { Context } from 'koa';
 
 export const AccountResolver = {
   Binary: BinaryResolver,
@@ -32,6 +33,20 @@ export const AccountResolver = {
       const token = generateToken(user);
 
       return { token };
+    },
+  },
+  Query: {
+    me: (_: never, {}, ctx: Context): Account => {
+      const data: Account = ctx.user.data;
+      const user = {
+        id: Buffer.from(data.id),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        emailAddress: data.emailAddress,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      };
+      return user;
     },
   },
 };
