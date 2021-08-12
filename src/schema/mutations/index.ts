@@ -17,8 +17,8 @@ export const mutations = gql`
 
   input SignUpInput {
     emailAddress: EmailAddress!
-    firstname: String!
-    lastname: String!
+    firstName: String!
+    lastName: String!
     password: String!
   }
 
