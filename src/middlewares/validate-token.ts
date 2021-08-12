@@ -1,23 +1,21 @@
-import { Context } from 'koa';
 import { verify } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
+import { AuthenticationError } from 'apollo-server-errors';
 
 const PW: string = process.env.TOKEN_PW || `mfmsosjwpxwszyzknnktjdvwqjspsqpw`;
 
-const validateToken = async (ctx: Context, next: Function) => {
-  const { authorization } = ctx.headers;
-  if (!authorization) ctx.throw(403, `Forbidden`);
+const validateToken = (auth: string = ``) => {
+  const token = auth.split(' ');
+  if (token.length == 0)
+    throw new AuthenticationError('Invalid authentication header.');
+  if (token[0].toLowerCase() !== 'bearer')
+    throw new AuthenticationError('Invalid authentication header.');
 
-  const token = authorization.split(' ');
-  if (token.length == 0) ctx.throw(403, `Forbidden`);
-  if (token[0].toLowerCase() !== 'bearer') ctx.throw(403, `Forbidden`);
+  const userToken = token[1];
 
-  const myToken = token[1];
-
-  const user = verify(myToken, PW);
-  ctx.user = user;
-  return next();
+  const user = verify(userToken, PW);
+  return user;
 };
 
 export { validateToken };

@@ -6,6 +6,8 @@ interface Account {
   lastName: string;
   emailAddress: string;
   password: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema<Account>(
@@ -15,6 +17,8 @@ const schema = new Schema<Account>(
     lastName: { type: String, required: true },
     emailAddress: { type: String, required: true },
     password: { type: String, required: true },
+    createdAt: Date,
+    updatedAt: Date,
   },
   {
     timestamps: true,

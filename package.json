@@ -30,10 +30,12 @@
     "dev": "nodemon src/index.ts",
     "build": "npx rimraf build/ && prettier --write src/**/* && tsc",
     "start": "node build/index",
-    "test": "NODE_ENV=test TS_NODE_PROJECT=tsconfig.json mocha --config src/tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\""
+    "test": "TS_NODE_PROJECT=tsconfig.json mocha --config src/tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\""
   },
   "dependencies": {
-    "@graphql-tools/schema": "^8.0.3",
+    "@graphql-tools/schema": "^7.1.5",
+    "@graphql-tools/utils": "^7.10.0",
+    "apollo-server-errors": "^3.0.1",
     "apollo-server-koa": "^3.1.2",
     "bcrypt": "^5.0.1",
     "chai": "^4.3.4",

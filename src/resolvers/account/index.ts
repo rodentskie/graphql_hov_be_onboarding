@@ -1,16 +1,14 @@
 import { generateId, EntityType } from '../../functions/generate-binary-id';
 import AccountModel from '../../models/accounts';
-import { encrypt } from '../../functions/secure-data';
+import { encrypt, compareData } from '../../functions/secure-data';
 import { generateToken } from '../../functions/create-token';
-import BinaryResolver from '../../schema/scalars/customs/binary-scalar';
-import EmailAddressResolver from '../../schema/scalars/customs/email-scalar';
-import { SignUpInput } from '../../types/accounts-types';
+import { UserInputError } from 'apollo-server-errors';
+
+import { SignUpInput, AuthenticateInput } from '../../types/accounts-types';
+import { Account } from '../../types/accounts-types';
 import { Context } from 'koa';
 
 export const AccountResolver = {
-  Binary: BinaryResolver,
-  EmailAddress: EmailAddressResolver,
-
   Mutation: {
     signUp: async (_: never, data: SignUpInput) => {
       const { input } = data;
@@ -21,7 +19,7 @@ export const AccountResolver = {
         emailAddress,
       });
 
-      if (emailExists) throw new Error('Email address already used.');
+      if (emailExists) throw new UserInputError('Email address already used.');
 
       const user = await AccountModel.create({
         id,
@@ -34,19 +32,32 @@ export const AccountResolver = {
 
       return { token };
     },
+    authenticate: async (_: never, data: AuthenticateInput) => {
+      const { input } = data;
+      const { emailAddress, password } = input;
+
+      const accountData = await AccountModel.findOne({
+        emailAddress,
+      });
+
+      if (!accountData) throw new UserInputError('Invalid credentials.');
+
+      const isCorrectPassword = await compareData(
+        password,
+        accountData.password,
+      );
+
+      if (!isCorrectPassword) throw new UserInputError('Invalid credentials.');
+
+      const token = generateToken(accountData);
+
+      return { token };
+    },
   },
   Query: {
     me: (_: never, {}, ctx: Context): Account => {
-      const data: Account = ctx.user.data;
-      const user = {
-        id: Buffer.from(data.id),
-        firstName: data.firstName,
-        lastName: data.lastName,
-        emailAddress: data.emailAddress,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-      };
-      return user;
+      const data: Account = ctx.data;
+      return data;
     },
   },
 };

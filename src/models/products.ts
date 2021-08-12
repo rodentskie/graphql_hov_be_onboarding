@@ -6,6 +6,8 @@ interface Product {
   description: string;
   owner: Buffer;
   cursor: Buffer;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const schema = new Schema<Product>(
@@ -18,6 +20,8 @@ const schema = new Schema<Product>(
       type: Buffer,
       index: true,
     },
+    createdAt: Date,
+    updatedAt: Date,
   },
   {
     timestamps: true,
