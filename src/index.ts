@@ -5,15 +5,29 @@ import Koa from 'koa';
 import { dbConn } from './data/index';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { typeDefs } from './schema/typeDefs/index';
-import { HelloWorldResolver, AccountResolver } from './resolvers/index';
+import {
+  HelloWorldResolver,
+  AccountResolver,
+  ProductResolver,
+  ScalarResolver,
+} from './resolvers/index';
 dotenv.config();
+import isPrivateDirective from './private/index';
 
 const app = new Koa();
 
 const apolloServer = new ApolloServer({
   schema: makeExecutableSchema({
     typeDefs,
-    resolvers: [HelloWorldResolver, AccountResolver],
+    resolvers: [
+      ProductResolver,
+      HelloWorldResolver,
+      AccountResolver,
+      ScalarResolver,
+    ],
+    schemaDirectives: {
+      private: isPrivateDirective,
+    },
   }),
   context: ({ ctx }) => {
     return ctx;
