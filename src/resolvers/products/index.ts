@@ -58,7 +58,7 @@ export const ProductResolver = {
         ...body,
       };
 
-      if (name && name !== '') {
+      if (name) {
         const entityId = generateId(EntityType.Product);
         const cursor = Buffer.concat([
           Buffer.from(name),
