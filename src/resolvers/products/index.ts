@@ -26,12 +26,11 @@ export const ProductResolver = {
         id: req.id,
         name: req.name,
         description: req.description,
+        owner: req.owner,
         createdAt: req.createdAt,
         updatedAt: req.updatedAt,
-        owner: {
-          ...user,
-        },
       };
+
       return product;
     },
   },

@@ -19,7 +19,6 @@ type Account = {
   firstName: string;
   lastName: string;
   emailAddress: string;
-  password: string;
   createdAt: Date;
   updatedAt: Date;
 };
