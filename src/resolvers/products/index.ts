@@ -49,8 +49,15 @@ export const ProductResolver = {
           options,
         ).where(queryFilter!);
       }
-
-      if (product.length == 0) throw new Error(`No products found.`);
+      if (product.length == 0) {
+        return {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: null,
+          },
+        };
+      }
       const endCursor = r.last(product)!.cursor;
       const hasNextPage = await ProductModel.exists({
         cursor: { $gt: endCursor },
