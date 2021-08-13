@@ -14,4 +14,11 @@ interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
-export { CreateProductInput, Product };
+
+type DeleteProductInput = {
+  input: {
+    id: Buffer;
+  };
+};
+
+export { CreateProductInput, Product, DeleteProductInput };

@@ -1,5 +1,8 @@
 import { generateId, EntityType } from '../../functions/generate-binary-id';
-import { CreateProductInput } from '../../types/products-types';
+import {
+  CreateProductInput,
+  DeleteProductInput,
+} from '../../types/products-types';
 import ProductModel from '../../models/products';
 import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
@@ -32,6 +35,28 @@ export const ProductResolver = {
       };
 
       return product;
+    },
+    deleteProduct: async (
+      _: never,
+      data: DeleteProductInput,
+      ctx: Context,
+    ): Promise<Boolean> => {
+      const user: Account = ctx.data;
+      const { id } = data.input;
+
+      let bool = false;
+
+      const product = await ProductModel.findOne({
+        id: id,
+        owner: user.id,
+      });
+
+      if (!product) return bool;
+
+      const del = await ProductModel.findByIdAndDelete(product._id);
+      if (del) bool = true;
+
+      return bool;
     },
   },
 };
