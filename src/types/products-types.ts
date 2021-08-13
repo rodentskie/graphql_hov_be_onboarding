@@ -14,4 +14,15 @@ interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
-export { CreateProductInput, Product };
+
+type UpdateProductInput = {
+  input: {
+    id: Buffer;
+    body: {
+      name: string;
+      description: string;
+    };
+  };
+};
+
+export { CreateProductInput, Product, UpdateProductInput };
