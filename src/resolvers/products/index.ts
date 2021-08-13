@@ -1,6 +1,7 @@
 import { generateId, EntityType } from '../../functions/generate-binary-id';
 import {
   CreateProductInput,
+  DeleteProductInput,
   UpdateProductInput,
   ProductQueryParams,
   LooseObject,
@@ -109,6 +110,28 @@ export const ProductResolver = {
       };
 
       return product;
+    },
+    deleteProduct: async (
+      _: never,
+      data: DeleteProductInput,
+      ctx: Context,
+    ): Promise<Boolean> => {
+      const user: Account = ctx.data;
+      const { id } = data.input;
+
+      let bool = false;
+      
+      const product = await ProductModel.findOne({
+        id: id,
+        owner: user.id,
+      });
+
+      if (!product) throw new UserInputError('Product not found.');
+  
+      const del = await ProductModel.findByIdAndDelete(product._id);
+      if (del) bool = true;
+
+      return bool;
     },
     updateProduct: async (_: never, data: UpdateProductInput, ctx: Context) => {
       const user: Account = ctx.data;
