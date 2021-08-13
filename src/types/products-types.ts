@@ -1,3 +1,8 @@
+import {
+  StringQueryOperatorInput,
+  BinaryQueryOperatorInput,
+} from './query-operator';
+
 type CreateProductInput = {
   input: {
     name: string;
@@ -14,4 +19,21 @@ interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
-export { CreateProductInput, Product };
+
+type ProductQueryParams = {
+  first: number;
+  after: Buffer;
+  filter: {
+    id: BinaryQueryOperatorInput;
+    name: StringQueryOperatorInput;
+  };
+  sort: {
+    name: number | string;
+  };
+};
+
+interface LooseObject {
+  [key: string]: any;
+}
+
+export { CreateProductInput, Product, ProductQueryParams, LooseObject };
