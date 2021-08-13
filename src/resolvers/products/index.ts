@@ -6,6 +6,7 @@ import {
 import ProductModel from '../../models/products';
 import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
+import { UserInputError } from 'apollo-server-errors';
 
 export const ProductResolver = {
   Mutation: {
@@ -51,7 +52,7 @@ export const ProductResolver = {
         owner: user.id,
       });
 
-      if (!product) return bool;
+      if (!product) throw new UserInputError('Product not found.');
 
       const del = await ProductModel.findByIdAndDelete(product._id);
       if (del) bool = true;
