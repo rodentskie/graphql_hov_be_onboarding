@@ -2,7 +2,6 @@ import { UserInputError } from 'apollo-server-errors';
 import r from 'ramda';
 import { EntityType } from '../../functions/generate-binary-id';
 import AccountModel from '../../models/accounts';
-import { Account } from '../../types/accounts-types';
 import ProductModel from '../../models/products';
 import { Product } from '../../types/products-types';
 import { Context } from 'koa';
@@ -15,26 +14,19 @@ export const NodeResolver = {
     },
   },
   Product: {
-    owner: async (root: Product, _: unknown, _context: Context) => {
-      const data = await AccountModel.findOne({ id: root.owner })!;
-      const user = data as Account;
-      return user;
-    },
+    owner: async (root: Product, _: unknown, _context: Context) =>
+      AccountModel.findOne({ id: root.owner }),
   },
   Query: {
     node: async (_: never, params: { id: Buffer }) => {
       const type = r.head(params.id as unknown as [number]);
 
       if (type === EntityType.Account) {
-        const data = await AccountModel.findOne({ id: params.id });
-        const user = data as Account;
-        return user;
+        return AccountModel.findOne({ id: params.id });
       }
 
       if (type === EntityType.Product) {
-        const data = await ProductModel.findOne({ id: params.id });
-        const product = data as Product;
-        return product;
+        return ProductModel.findOne({ id: params.id });
       }
 
       throw new UserInputError('Invalid Id');
