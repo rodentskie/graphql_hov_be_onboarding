@@ -20,6 +20,16 @@ interface Product {
   updatedAt: Date;
 }
 
+type UpdateProductInput = {
+  input: {
+    id: Buffer;
+    body: {
+      name: string;
+      description: string;
+    };
+  };
+};
+
 type ProductQueryParams = {
   first: number;
   after: Buffer;
@@ -36,4 +46,5 @@ interface LooseObject {
   [key: string]: any;
 }
 
-export { CreateProductInput, Product, ProductQueryParams, LooseObject };
+export { CreateProductInput, Product, ProductQueryParams, LooseObject, UpdateProductInput };
+

@@ -1,6 +1,7 @@
 import { generateId, EntityType } from '../../functions/generate-binary-id';
 import {
   CreateProductInput,
+  UpdateProductInput,
   ProductQueryParams,
   LooseObject,
   Product,
@@ -8,6 +9,7 @@ import {
 import ProductModel from '../../models/products';
 import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
+import { UserInputError } from 'apollo-server-errors';
 import r from 'ramda';
 import { covertToQueryFilter } from '../helpers/convert-to-query';
 
@@ -107,6 +109,40 @@ export const ProductResolver = {
       };
 
       return product;
+    },
+    updateProduct: async (_: never, data: UpdateProductInput, ctx: Context) => {
+      const user: Account = ctx.data;
+      const { input } = data;
+      const { id, body } = input;
+      const { name, description } = body;
+
+      if (name === '') throw new UserInputError('Please enter product name.');
+      if (description === '')
+        throw new UserInputError('Please enter product description.');
+
+      const product = await ProductModel.findOne({
+        id: id,
+        owner: user.id,
+      });
+
+      if (!product) throw new UserInputError('Product does not exist');
+
+      const toUpdate: LooseObject = {
+        ...body,
+      };
+
+      if (name) {
+        const entityId = generateId(EntityType.Product);
+        const cursor = Buffer.concat([
+          Buffer.from(name),
+          Buffer.from(entityId),
+        ]);
+        toUpdate.cursor = cursor;
+      }
+
+      return ProductModel.findByIdAndUpdate(product._id, toUpdate, {
+        new: true,
+      });
     },
   },
 };
