@@ -29,14 +29,17 @@ export const ProductResolver = {
       let finalData: LooseObject = {};
 
       const options: LooseObject = {
-        limit: parseInt(first.toString()),
+        limit: first ? parseInt(first.toString()) : 5,
         sort,
       };
 
-      options.sort.name = options.sort.name == 1 ? `asc` : `desc`;
+      if (options.sort)
+        options.sort.name = options.sort.name == 1 ? `asc` : `desc`;
+
       const queryFilter = covertToQueryFilter(filter);
 
       if (!after) {
+        if (!options.sort) options.sort = {};
         options.sort['createdAt'] = `asc`;
         product = await ProductModel.find({}, null, options).where(
           queryFilter!,
@@ -120,14 +123,14 @@ export const ProductResolver = {
       const { id } = data.input;
 
       let bool = false;
-      
+
       const product = await ProductModel.findOne({
         id: id,
         owner: user.id,
       });
 
       if (!product) throw new UserInputError('Product not found.');
-  
+
       const del = await ProductModel.findByIdAndDelete(product._id);
       if (del) bool = true;
 

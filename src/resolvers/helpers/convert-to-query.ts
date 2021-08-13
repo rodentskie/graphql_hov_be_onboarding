@@ -6,6 +6,8 @@ import {
 const covertToQueryFilter = (filter: LooseObject) => {
   let finalQuery: LooseObject = {};
 
+  if (!filter) return finalQuery;
+
   if (filter.name) {
     const query: StringQueryOperatorInput = filter.name;
 
