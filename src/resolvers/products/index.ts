@@ -2,13 +2,86 @@ import { generateId, EntityType } from '../../functions/generate-binary-id';
 import {
   CreateProductInput,
   UpdateProductInput,
+  ProductQueryParams,
+  LooseObject,
+  Product,
 } from '../../types/products-types';
 import ProductModel from '../../models/products';
 import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
 import { UserInputError } from 'apollo-server-errors';
+import r from 'ramda';
+import { covertToQueryFilter } from '../helpers/convert-to-query';
 
 export const ProductResolver = {
+  Query: {
+    products: async (_: never, data: ProductQueryParams, ctx: Context) => {
+      let {
+        first = 5,
+        after,
+        filter,
+        sort = {
+          name: 1,
+        },
+      } = data;
+      let product: Array<Product> = [];
+      let finalData: LooseObject = {};
+
+      const options: LooseObject = {
+        limit: parseInt(first.toString()),
+        sort,
+      };
+
+      options.sort.name = options.sort.name == 1 ? `asc` : `desc`;
+      const queryFilter = covertToQueryFilter(filter);
+
+      if (!after) {
+        options.sort['createdAt'] = `asc`;
+        product = await ProductModel.find({}, null, options).where(
+          queryFilter!,
+        );
+      }
+
+      if (after) {
+        product = await ProductModel.find(
+          {
+            cursor: { $gte: after },
+          },
+          null,
+          options,
+        ).where(queryFilter!);
+      }
+      if (product.length == 0) {
+        return {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: null,
+          },
+        };
+      }
+      const endCursor = r.last(product)!.cursor;
+      const hasNextPage = await ProductModel.exists({
+        cursor: { $gt: endCursor },
+      });
+
+      finalData = {
+        edges: r.map(
+          (data) => ({
+            node: data,
+            cursor: data.cursor,
+          }),
+          product,
+        ),
+        pageInfo: {
+          hasNextPage,
+          endCursor,
+        },
+      };
+
+      return finalData;
+    },
+  },
   Mutation: {
     createProduct: async (_: never, data: CreateProductInput, ctx: Context) => {
       const { input } = data;
