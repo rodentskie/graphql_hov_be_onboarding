@@ -1,11 +1,9 @@
 import { expect } from 'chai';
-import {
-  getToken,
-  returnExistingProduct,
-  returnUserBinaryId,
-} from '../generators/node-generator';
+import { returnUserBinaryId } from '../generators/node-generator';
 import server from '../../index';
 import request from 'supertest';
+import { getToken } from '../generators/account-generator';
+import { returnExistingProduct } from '../generators/products-generator';
 
 const nodeQuery = `
 query($id:Binary!){
@@ -23,13 +21,9 @@ query($id:Binary!){
 }
 `;
 
-let token: string = ``;
-before(async () => {
-  token = await getToken();
-});
-
 describe(`Node test suite.`, () => {
   it('Get product data.', async () => {
+    const token = await getToken();
     const productId = await returnExistingProduct(token);
     const hexId = productId.toString('hex');
 
@@ -47,6 +41,7 @@ describe(`Node test suite.`, () => {
   });
 
   it('Get product data, ID is invalid.', async () => {
+    const token = await getToken();
     const productId = await returnExistingProduct(token);
     const hexId = `error${productId.toString('hex')}`;
 
@@ -64,6 +59,7 @@ describe(`Node test suite.`, () => {
   });
 
   it('Get user data.', async () => {
+    const token = await getToken();
     const userId = await returnUserBinaryId(token);
 
     const res = await request(server)
@@ -80,6 +76,7 @@ describe(`Node test suite.`, () => {
   });
 
   it('Get user data, ID is invalid', async () => {
+    const token = await getToken();
     const userId = await returnUserBinaryId(token);
     const hexId = userId.toString('hex');
 
