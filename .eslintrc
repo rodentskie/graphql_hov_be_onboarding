@@ -1,41 +1,29 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint",
-    "prettier",
-    "import"
-  ],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
+  "plugins": ["@typescript-eslint", "import"],
   "extends": [
-    "airbnb-typescript/base",
+    "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier"
+    "plugin:import/typescript"
   ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "env": {
     "node": true,
     "mocha": true
   },
   "rules": {
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never"
-      }
-   ],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/prefer-interface": "off",
+    "max-len": ["error", 128],
+    "import/extensions": "off",
     "func-names": "off",
-    "class-methods-use-this": "off",
-    "no-useless-constructor": "off",
-    "@typescript-eslint/no-useless-constructor": "off",
+    "semi": "off",
+    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "import/prefer-default-export": "off",
-    "prettier/prettier": ["error", {
-      "endOfLine":"auto"
-    }]
+    "@typescript-eslint/ban-types": "off",
+    "class-methods-use-this": "off"
   }
 }
