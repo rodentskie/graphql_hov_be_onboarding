@@ -39,7 +39,7 @@ describe('Update product test suite.', () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.updateProduct).to.not.undefined;
+    expect(res.body.data).to.have.property('updateProduct');
   });
 
   it('Update product different user.', async () => {

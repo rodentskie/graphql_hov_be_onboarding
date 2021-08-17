@@ -23,7 +23,7 @@ describe(`Me account test suite.`, () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.me).to.exist;
+    expect(res.body.data).to.have.property('me');
   });
 
   it('Me error no token.', async () => {

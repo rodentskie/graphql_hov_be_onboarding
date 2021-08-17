@@ -24,7 +24,7 @@ describe('Sign up account test suite.', () => {
         },
       });
 
-    expect(res.body.data.signUp.token).to.exist;
+    expect(res.body.data.signUp).to.have.property('token');
   });
 
   it('Sign up error no first name.', async () => {

@@ -44,7 +44,7 @@ describe(`Authenticate account test suite.`, () => {
         },
       });
 
-    expect(res.body.data.authenticate.token).to.exist;
+    expect(res.body.data.authenticate).to.have.property('token');
   });
 
   it('Authentication fail password invalid.', async () => {

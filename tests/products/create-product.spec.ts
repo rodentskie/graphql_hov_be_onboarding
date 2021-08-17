@@ -27,7 +27,7 @@ describe('Create product test suite.', () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.createProduct).to.exist;
+    expect(res.body.data).to.have.property('createProduct');
   });
 
   it('Create product error no product name.', async () => {

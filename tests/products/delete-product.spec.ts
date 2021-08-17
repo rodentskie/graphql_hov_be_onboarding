@@ -28,7 +28,7 @@ describe('Delete product test suite.', () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.deleteProduct).to.exist;
+    expect(res.body.data).to.have.property('deleteProduct');
   });
 
   it('Delete product no token.', async () => {

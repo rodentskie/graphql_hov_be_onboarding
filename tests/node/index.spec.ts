@@ -37,7 +37,7 @@ describe(`Node test suite.`, () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.node).to.exist;
+    expect(res.body.data).to.have.property('node');
   });
 
   it('Get product data, ID is invalid.', async () => {
@@ -72,7 +72,7 @@ describe(`Node test suite.`, () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.node).to.exist;
+    expect(res.body.data).to.have.property('node');
   });
 
   it('Get user data, ID is invalid', async () => {
