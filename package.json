@@ -29,8 +29,8 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "nodemon index.ts",
-    "build": "npx rimraf build/ && prettier --write src/**/* && tsc",
-    "start": "node index",
+    "build": "npx rimraf build/ && prettier --write ./**/* && tsc",
+    "start": "node build/index",
     "test": "TS_NODE_PROJECT=tsconfig.json mocha --config tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\"",
     "lint": "eslint . --ext .ts"
   },
