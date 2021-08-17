@@ -1,6 +1,7 @@
 {
   "name": "backend-engineer-onboarding-exercises",
   "devDependencies": {
+    "@bazel/typescript": "^3.8.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
     "@types/bcrypt": "^5.0.0",
