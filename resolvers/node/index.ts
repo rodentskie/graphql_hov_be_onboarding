@@ -1,10 +1,10 @@
-import { UserInputError } from 'apollo-server-errors';
-import r from 'ramda';
-import { EntityType } from '../../functions/generate-binary-id';
-import AccountModel from '../../models/accounts';
-import ProductModel from '../../models/products';
-import { Product } from '../../types/products-types';
-import { Account } from '../../types/accounts-types';
+import { UserInputError } from "apollo-server-errors";
+import r from "ramda";
+import { EntityType } from "../../functions/generate-binary-id";
+import AccountModel from "../../models/accounts";
+import ProductModel from "../../models/products";
+import { Product } from "../../types/products-types";
+import { Account } from "../../types/accounts-types";
 
 export const NodeResolver = {
   Node: {
@@ -20,7 +20,7 @@ export const NodeResolver = {
   Query: {
     node: async (
       _: never,
-      params: { id: Buffer },
+      params: { id: Buffer }
     ): Promise<Account | Product | null> => {
       const type = r.head(params.id as unknown as [number]);
 
@@ -32,7 +32,7 @@ export const NodeResolver = {
         return ProductModel.findOne({ id: params.id });
       }
 
-      throw new UserInputError('Invalid Id');
+      throw new UserInputError("Invalid Id");
     },
   },
 };

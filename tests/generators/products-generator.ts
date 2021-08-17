@@ -1,8 +1,8 @@
-import { commerce } from 'faker';
-import { CreateProductInput } from '../../types/products-types';
-import ProductModel from '../../models/products';
-import { validateToken } from '../../middlewares/validate-token';
-import { generateId, EntityType } from '../../functions/generate-binary-id';
+import { commerce } from "faker";
+import { CreateProductInput } from "../../types/products-types";
+import ProductModel from "../../models/products";
+import { validateToken } from "../../middlewares/validate-token";
+import { generateId, EntityType } from "../../functions/generate-binary-id";
 
 const generateFakeProduct = () => {
   const name = commerce.product();

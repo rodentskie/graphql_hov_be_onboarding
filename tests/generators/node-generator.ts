@@ -1,4 +1,4 @@
-import { validateToken } from '../../middlewares/validate-token';
+import { validateToken } from "../../middlewares/validate-token";
 
 const returnUserBinaryId = async (token: string) => {
   const user = validateToken(`Bearer ${token}`);

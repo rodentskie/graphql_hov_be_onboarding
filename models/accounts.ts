@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 interface Account {
   id: Buffer;
@@ -22,9 +22,9 @@ const schema = new Schema<Account>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const AccountModel = model<Account>('Account', schema);
+const AccountModel = model<Account>("Account", schema);
 
 export default AccountModel;

@@ -1,6 +1,6 @@
 workspace(
     name = "graph_hov_be_onboarding",
-    managed_directories = {"@npm": ["node_modules"]},
+    managed_directories = {"@npm": ["npm/node_modules"]},
 )
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -11,7 +11,7 @@ http_archive(
     urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.8.0/rules_nodejs-3.8.0.tar.gz"],
 )
 
-load("@build_bazel_rules_nodejs//:index.bzl", "npm_install", "node_repositories")
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "npm_install")
 
 npm_install(
     name = "npm",

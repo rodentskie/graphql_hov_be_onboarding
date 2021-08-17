@@ -1,8 +1,8 @@
-import { LooseObject } from '../../types/products-types';
+import { LooseObject } from "../../types/products-types";
 import {
   StringQueryOperatorInput,
   BinaryQueryOperatorInput,
-} from '../../types/query-operator';
+} from "../../types/query-operator";
 
 const covertToQueryFilter = (filter: LooseObject) => {
   let finalQuery: LooseObject = {};
@@ -48,7 +48,7 @@ const covertToQueryFilter = (filter: LooseObject) => {
       finalQuery = {
         name: {
           $regex: `^${query.startsWith}`,
-          $options: 'i',
+          $options: "i",
         },
       };
     }
@@ -57,7 +57,7 @@ const covertToQueryFilter = (filter: LooseObject) => {
       finalQuery = {
         name: {
           $regex: query.contains,
-          $options: 'i',
+          $options: "i",
         },
       };
     }

@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
 interface Product {
   id: Buffer;
@@ -25,9 +25,9 @@ const schema = new Schema<Product>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-const ProductModel = model<Product>('Product', schema);
+const ProductModel = model<Product>("Product", schema);
 
 export default ProductModel;

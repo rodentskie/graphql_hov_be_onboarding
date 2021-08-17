@@ -1,7 +1,7 @@
 import {
   StringQueryOperatorInput,
   BinaryQueryOperatorInput,
-} from './query-operator';
+} from "./query-operator";
 
 type CreateProductInput = {
   input: {

@@ -1,4 +1,4 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin")
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin", "nodejs_test")
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 
 package(default_visibility = ["//visibility:public"])
@@ -83,7 +83,6 @@ npm_package_bin(
         ".",
         "--ext .ts",
     ],
-    chdir = package_name(),
     data = glob(["**/*.ts"]) + deps + type_deps + dev_deps + [
         "//:package.json",
         "//:tsconfig.json",
@@ -92,4 +91,20 @@ npm_package_bin(
     ],
     output_dir = True,
     tool = "@npm//eslint/bin:eslint",
+)
+
+nodejs_test(
+    name = "test",
+    entry_point = "@npm//:node_modules/mocha/bin/mocha",
+    data = glob(["**/*.ts"]) + deps + type_deps + dev_deps + [
+        "//:package.json",
+        "//:tsconfig.json"
+    ],
+    templated_args = [
+        "--require mocha",
+        "--require ts-node/register",
+        "TS_NODE_PROJECT=tsconfig.json",
+        "mocha --config tests/.mocharc.json -r",
+        "ts-node/register \"./**/*.spec.ts\""
+    ],
 )
