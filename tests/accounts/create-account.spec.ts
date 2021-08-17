@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import server from '../../index';
 import { dummyAccount } from '../generators/account-generator';
+import AccountModel from '../../models/accounts';
 
 const signUpMutation = `
     mutation($input:SignUpInput!) {
@@ -9,6 +10,10 @@ const signUpMutation = `
             token
         }
     }`;
+
+after(async () => {
+  await AccountModel.deleteMany();
+});
 
 describe('Sign up account test suite.', () => {
   it('Successful sign up.', async () => {

@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import server from '../../index';
 import { getToken } from '../generators/account-generator';
+import AccountModel from '../../models/accounts';
 
 const meQuery = `
   query{
@@ -12,6 +13,10 @@ const meQuery = `
         }
   }
 `;
+
+after(async () => {
+  await AccountModel.deleteMany();
+});
 
 describe(`Me account test suite.`, () => {
   it('Me should display my account data.', async () => {

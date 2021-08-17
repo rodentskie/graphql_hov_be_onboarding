@@ -3,12 +3,17 @@ import request from 'supertest';
 import { returnExistingProduct } from '../generators/products-generator';
 import server from '../../index';
 import { getToken } from '../generators/account-generator';
+import ProductModel from '../../models/products';
 
 const deleteProductMutation = `
             mutation($input:DeleteProductInput!){
                 deleteProduct(input: $input)
             }
         `;
+
+after(async () => {
+  await ProductModel.deleteMany();
+});
 
 describe('Delete product test suite.', () => {
   it('Successful delete product.', async () => {

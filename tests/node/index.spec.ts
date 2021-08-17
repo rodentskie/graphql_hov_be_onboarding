@@ -4,6 +4,8 @@ import { returnUserBinaryId } from '../generators/node-generator';
 import server from '../../index';
 import { getToken } from '../generators/account-generator';
 import { returnExistingProduct } from '../generators/products-generator';
+import AccountModel from '../../models/accounts';
+import ProductModel from '../../models/products';
 
 const nodeQuery = `
 query($id:Binary!){
@@ -20,6 +22,11 @@ query($id:Binary!){
     }
 }
 `;
+
+after(async () => {
+  await AccountModel.deleteMany();
+  await ProductModel.deleteMany();
+});
 
 describe(`Node test suite.`, () => {
   it('Get product data.', async () => {

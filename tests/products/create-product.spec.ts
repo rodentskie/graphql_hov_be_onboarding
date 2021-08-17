@@ -3,6 +3,7 @@ import request from 'supertest';
 import { generateFakeProduct } from '../generators/products-generator';
 import server from '../../index';
 import { getToken } from '../generators/account-generator';
+import ProductModel from '../../models/products';
 
 const createProductMutation = `
             mutation($input:CreateProductInput!){
@@ -12,6 +13,10 @@ const createProductMutation = `
                 }
             }
         `;
+
+after(async () => {
+  await ProductModel.deleteMany();
+});
 
 describe('Create product test suite.', () => {
   it('Successful create product.', async () => {

@@ -6,6 +6,7 @@ import {
 } from '../generators/products-generator';
 import server from '../../index';
 import { getToken } from '../generators/account-generator';
+import ProductModel from '../../models/products';
 
 const updateProductMutation = `
             mutation($input:UpdateProductInput!){
@@ -16,6 +17,10 @@ const updateProductMutation = `
                 }
             }
         `;
+
+after(async () => {
+  await ProductModel.deleteMany();
+});
 
 describe('Update product test suite.', () => {
   it('Successful update product.', async () => {
