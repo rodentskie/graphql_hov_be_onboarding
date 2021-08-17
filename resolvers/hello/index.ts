@@ -1,6 +1,6 @@
 export const HelloWorldResolver = {
   Query: {
-    hello: (): String => {
+    hello: (): string => {
       return `Hello World`;
     },
   },

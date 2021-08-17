@@ -1,10 +1,10 @@
 import { expect } from 'chai';
+import request from 'supertest';
 import {
   generateFakeProduct,
   returnExistingProduct,
 } from '../generators/products-generator';
 import server from '../../index';
-import request from 'supertest';
 import { getToken } from '../generators/account-generator';
 
 const updateProductMutation = `
@@ -39,7 +39,7 @@ describe('Update product test suite.', () => {
       })
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.body.data.updateProduct).to.exist;
+    expect(res.body.data.updateProduct).to.not.undefined;
   });
 
   it('Update product different user.', async () => {

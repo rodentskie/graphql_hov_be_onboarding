@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import server from '../../index';
 import request from 'supertest';
+import server from '../../index';
 import { dummyAccount } from '../generators/account-generator';
 
 const signUpMutation = `

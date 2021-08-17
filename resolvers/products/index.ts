@@ -1,3 +1,6 @@
+import { Context } from 'koa';
+import { UserInputError } from 'apollo-server-errors';
+import r from 'ramda';
 import { generateId, EntityType } from '../../functions/generate-binary-id';
 import {
   CreateProductInput,
@@ -8,16 +11,13 @@ import {
   Product,
 } from '../../types/products-types';
 import ProductModel from '../../models/products';
-import { Context } from 'koa';
 import { Account } from '../../types/accounts-types';
-import { UserInputError } from 'apollo-server-errors';
-import r from 'ramda';
 import { covertToQueryFilter } from '../helpers/convert-to-query';
 
 export const ProductResolver = {
   Query: {
-    products: async (_: never, data: ProductQueryParams, ctx: Context) => {
-      let {
+    products: async (_: never, data: ProductQueryParams) => {
+      const {
         first = 5,
         after,
         filter,
@@ -29,18 +29,18 @@ export const ProductResolver = {
       let finalData: LooseObject = {};
 
       const options: LooseObject = {
-        limit: first ? parseInt(first.toString()) : 5,
+        limit: first ? Number(first) : 5,
         sort,
       };
 
       if (options.sort)
-        options.sort.name = options.sort.name == 1 ? `asc` : `desc`;
+        options.sort.name = options.sort.name === 1 ? `asc` : `desc`;
 
       const queryFilter = covertToQueryFilter(filter);
 
       if (!after) {
         if (!options.sort) options.sort = {};
-        options.sort['createdAt'] = `asc`;
+        options.sort.createdAt = `asc`;
         product = await ProductModel.find({}, null, options).where(
           queryFilter!,
         );
@@ -55,7 +55,7 @@ export const ProductResolver = {
           options,
         ).where(queryFilter!);
       }
-      if (product.length == 0) {
+      if (product.length === 0) {
         return {
           edges: [],
           pageInfo: {
@@ -71,9 +71,9 @@ export const ProductResolver = {
 
       finalData = {
         edges: r.map(
-          (data) => ({
-            node: data,
-            cursor: data.cursor,
+          (item) => ({
+            node: item,
+            cursor: item.cursor,
           }),
           product,
         ),
@@ -118,25 +118,30 @@ export const ProductResolver = {
       _: never,
       data: DeleteProductInput,
       ctx: Context,
-    ): Promise<Boolean> => {
+    ): Promise<boolean> => {
       const user: Account = ctx.data;
+
       const { id } = data.input;
 
       let bool = false;
 
       const product = await ProductModel.findOne({
-        id: id,
+        id,
         owner: user.id,
       });
 
       if (!product) throw new UserInputError('Product not found.');
 
-      const del = await ProductModel.findByIdAndDelete(product._id);
+      const del = await product.remove();
       if (del) bool = true;
 
       return bool;
     },
-    updateProduct: async (_: never, data: UpdateProductInput, ctx: Context) => {
+    updateProduct: async (
+      _: never,
+      data: UpdateProductInput,
+      ctx: Context,
+    ): Promise<Product | null> => {
       const user: Account = ctx.data;
       const { input } = data;
       const { id, body } = input;
@@ -147,15 +152,11 @@ export const ProductResolver = {
         throw new UserInputError('Please enter product description.');
 
       const product = await ProductModel.findOne({
-        id: id,
+        id,
         owner: user.id,
       });
 
       if (!product) throw new UserInputError('Product does not exist');
-
-      const toUpdate: LooseObject = {
-        ...body,
-      };
 
       if (name) {
         const entityId = generateId(EntityType.Product);
@@ -163,12 +164,16 @@ export const ProductResolver = {
           Buffer.from(name),
           Buffer.from(entityId),
         ]);
-        toUpdate.cursor = cursor;
+        product.name = name;
+        product.cursor = cursor;
       }
 
-      return ProductModel.findByIdAndUpdate(product._id, toUpdate, {
-        new: true,
-      });
+      if (description) {
+        product.description = description;
+      }
+
+      const update = await product.save();
+      return update;
     },
   },
 };

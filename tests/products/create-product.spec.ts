@@ -1,7 +1,7 @@
 import { expect } from 'chai';
+import request from 'supertest';
 import { generateFakeProduct } from '../generators/products-generator';
 import server from '../../index';
-import request from 'supertest';
 import { getToken } from '../generators/account-generator';
 
 const createProductMutation = `

@@ -1,14 +1,15 @@
 import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
-import { Me } from '../types/accounts-types';
 import {
   DirectiveLocation,
   GraphQLDirective,
   defaultFieldResolver,
 } from 'graphql';
 import { Context } from 'koa';
-
+import { AuthenticationError } from 'apollo-server-errors';
+import { Me } from '../types/accounts-types';
 import { validateToken } from '../middlewares/validate-token';
-class isPrivateDirective extends SchemaDirectiveVisitor {
+
+class IsPrivateDirective extends SchemaDirectiveVisitor {
   static getDirectiveDeclaration(directiveName = 'private') {
     return new GraphQLDirective({
       name: directiveName,
@@ -16,21 +17,28 @@ class isPrivateDirective extends SchemaDirectiveVisitor {
     });
   }
 
-  visitFieldDefinition(field: any) {
+  visitFieldDefinition(fields: any = {}) {
+    const field = fields;
     const { resolve = defaultFieldResolver } = field;
-    field.resolve = (root: any, args: any, context: Context, info: any) => {
-      const auth = context.request.header.authorization;
+    field.resolve = (
+      root: Record<string, unknown>,
+      args: Record<string, unknown>,
+      context: Context,
+      info: Record<string, unknown>,
+    ) => {
+      const auth: string = context.request.header.authorization!;
+      if (!auth)
+        throw new AuthenticationError('Invalid authentication header.');
       const user = validateToken(auth) as Me;
-      const data = user.data;
+      const { data } = user;
       data.id = Buffer.from(data.id);
-
       return resolve.call(this, root, args, { ...context, data }, info);
     };
   }
 
-  visitObject(type: object) {
+  visitObject(type: unknown) {
     console.log(type);
   }
 }
 
-export = isPrivateDirective;
+export = IsPrivateDirective;

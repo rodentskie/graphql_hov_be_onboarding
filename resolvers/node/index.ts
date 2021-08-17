@@ -4,7 +4,7 @@ import { EntityType } from '../../functions/generate-binary-id';
 import AccountModel from '../../models/accounts';
 import ProductModel from '../../models/products';
 import { Product } from '../../types/products-types';
-import { Context } from 'koa';
+import { Account } from '../../types/accounts-types';
 
 export const NodeResolver = {
   Node: {
@@ -14,11 +14,14 @@ export const NodeResolver = {
     },
   },
   Product: {
-    owner: async (root: Product, _: unknown, _context: Context) =>
+    owner: async (root: Product): Promise<Account | null> =>
       AccountModel.findOne({ id: root.owner }),
   },
   Query: {
-    node: async (_: never, params: { id: Buffer }) => {
+    node: async (
+      _: never,
+      params: { id: Buffer },
+    ): Promise<Account | Product | null> => {
       const type = r.head(params.id as unknown as [number]);
 
       if (type === EntityType.Account) {

@@ -28,10 +28,11 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon index.ts",
     "build": "npx rimraf build/ && prettier --write src/**/* && tsc",
-    "start": "node build/index",
-    "test": "TS_NODE_PROJECT=tsconfig.json mocha --config src/tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\""
+    "start": "node index",
+    "test": "TS_NODE_PROJECT=tsconfig.json mocha --config tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\"",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.1.5",

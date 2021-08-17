@@ -20,14 +20,11 @@ interface Product {
   updatedAt: Date;
 }
 
-
 type DeleteProductInput = {
   input: {
     id: Buffer;
   };
 };
-
-
 
 type UpdateProductInput = {
   input: {
@@ -55,6 +52,11 @@ interface LooseObject {
   [key: string]: any;
 }
 
-export { CreateProductInput, Product, ProductQueryParams, LooseObject, UpdateProductInput, DeleteProductInput };
-
-
+export {
+  CreateProductInput,
+  Product,
+  ProductQueryParams,
+  LooseObject,
+  UpdateProductInput,
+  DeleteProductInput,
+};

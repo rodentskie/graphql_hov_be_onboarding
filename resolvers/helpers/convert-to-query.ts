@@ -3,6 +3,7 @@ import {
   StringQueryOperatorInput,
   BinaryQueryOperatorInput,
 } from '../../types/query-operator';
+
 const covertToQueryFilter = (filter: LooseObject) => {
   let finalQuery: LooseObject = {};
 

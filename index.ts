@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-koa';
 import dotenv from 'dotenv';
 import Koa from 'koa';
-import { dbConn } from './data/index';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import { dbConn } from './data/index';
 import { typeDefs } from './schema/typeDefs/index';
 import {
   HelloWorldResolver,
@@ -12,8 +12,9 @@ import {
   ScalarResolver,
   NodeResolver,
 } from './resolvers/index';
+import IsPrivateDirective from './private/index';
+
 dotenv.config();
-import isPrivateDirective from './private/index';
 
 const app = new Koa();
 
@@ -28,7 +29,7 @@ const apolloServer = new ApolloServer({
       NodeResolver,
     ],
     schemaDirectives: {
-      private: isPrivateDirective,
+      private: IsPrivateDirective,
     },
   }),
   context: ({ ctx }) => {

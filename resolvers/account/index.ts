@@ -1,11 +1,14 @@
+import { UserInputError } from 'apollo-server-errors';
 import { generateId, EntityType } from '../../functions/generate-binary-id';
 import AccountModel from '../../models/accounts';
 import { encrypt, compareData } from '../../functions/secure-data';
 import { generateToken } from '../../functions/create-token';
-import { UserInputError } from 'apollo-server-errors';
-
-import { SignUpInput, AuthenticateInput } from '../../types/accounts-types';
-import { Account, PrivateContext } from '../../types/accounts-types';
+import {
+  SignUpInput,
+  AuthenticateInput,
+  Account,
+  PrivateContext,
+} from '../../types/accounts-types';
 
 export const AccountResolver = {
   Mutation: {
@@ -54,6 +57,6 @@ export const AccountResolver = {
     },
   },
   Query: {
-    me: (_: never, {}, ctx: PrivateContext): Account => ctx.data,
+    me: (_: never, __: never, ctx: PrivateContext): Account => ctx.data,
   },
 };

@@ -1,5 +1,6 @@
 import { hash, compare, genSalt } from 'bcrypt';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const encrypt = async (str: string) => {

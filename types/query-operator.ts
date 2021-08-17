@@ -5,12 +5,12 @@ type BinaryQueryOperatorInput = {
   nin?: [Buffer];
 };
 type StringQueryOperatorInput = {
-  eq?: String;
-  ne?: String;
-  in?: [String];
-  nin?: [String];
-  startsWith?: String;
-  contains?: String;
+  eq?: string;
+  ne?: string;
+  in?: [string];
+  nin?: [string];
+  startsWith?: string;
+  contains?: string;
 };
 
 export { StringQueryOperatorInput, BinaryQueryOperatorInput };

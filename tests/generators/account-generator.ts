@@ -1,7 +1,7 @@
 import { internet, name } from 'faker';
+import request from 'supertest';
 import { SignUpInput } from '../../types/accounts-types';
 import server from '../../index';
-import request from 'supertest';
 
 const dummyAccount = () => {
   const data: SignUpInput = {
@@ -34,7 +34,7 @@ const getToken = async (): Promise<string> => {
       },
     });
 
-  const token: string = res.body.data.signUp.token;
+  const { token } = res.body.data.signUp;
   return token;
 };
 
