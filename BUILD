@@ -147,6 +147,7 @@ container_image(
     user = "root",
     volumes=["./graphql_hov_be_onboarding:/usr/src/app"],
     workdir="/usr/src/app",
-    stamp = True
+    stamp = True,
+    repository = "bazel/graphql_be_onboarding"
 )
 
