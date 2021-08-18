@@ -1,5 +1,7 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin", "nodejs_test")
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -67,7 +69,6 @@ ts_project(
         exclude = [
             "**/*spec.ts",
             "tests/**/*.*",
-            "node_modules/**/*.*",
         ],
     ),
     declaration = True,
@@ -93,14 +94,27 @@ npm_package_bin(
     tool = "@npm//eslint/bin:eslint",
 )
 
+sources = glob(
+    [
+        "**/*.ts",
+    ]
+)
+tests = glob(
+    [
+        "**/*.spec.ts"
+    ],
+)
+
 nodejs_test(
     name = "test",
+    chdir = package_name(),
     entry_point = "@npm//:node_modules/mocha/bin/mocha",
-    data = glob(["**/*.ts"]) + deps + type_deps + dev_deps + [
+    data = sources +  deps + type_deps + dev_deps + [
         "//:package.json",
-        "//:tsconfig.json"
+        "//:tsconfig.json",
+        "//:tests/.mocharc.json",
     ],
-    templated_args = [
+    templated_args = ["$$(rlocation $(rootpath %s))" % s for s in tests] + [
         "--require mocha",
         "--require ts-node/register",
         "TS_NODE_PROJECT=tsconfig.json",
@@ -108,3 +122,26 @@ nodejs_test(
         "ts-node/register \"./**/*.spec.ts\""
     ],
 )
+
+nodejs_image(
+    name = "image",
+    data = [
+        ":build",
+    ] + deps + type_deps + dev_deps + [
+        "//:package.json",
+        "//:tsconfig.json",
+    ],
+    entry_point = "//:index.js",
+)
+
+container_image(
+    name="docker_image",
+    base="@base_node//image",
+    directory="/usr/src/app",
+    files = [":image"],
+    entrypoint = ["//:index.js"],
+    ports=["3014"],
+    volumes=["./graphql_hov_be_onboarding:/usr/src/app"],
+    workdir="/usr/src/app",
+)
+
