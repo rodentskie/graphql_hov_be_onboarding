@@ -36,13 +36,6 @@ load(
 
 container_repositories()
 
-load(
-    "@io_bazel_rules_docker//nodejs:image.bzl",
-    _nodejs_image_repos = "repositories",
-)
-
-_nodejs_image_repos()
-
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
 
 container_deps()
@@ -56,7 +49,7 @@ container_pull(
     name = "base_node",
     registry = "docker.io",
     repository = "library/node",
-    tag = "14.17.5-stretch",
+    tag = "14.17.5-alpine",
 )
 
 http_archive(

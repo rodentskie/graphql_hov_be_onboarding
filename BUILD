@@ -1,6 +1,5 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin", "nodejs_test")
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin", "nodejs_test", "js_library")
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
 package(default_visibility = ["//visibility:public"])
@@ -123,25 +122,31 @@ nodejs_test(
     ],
 )
 
-nodejs_image(
+
+
+js_library(
     name = "image",
-    data = [
+    package_name = "@bazel/graphql",
+    srcs = [
         ":build",
-    ] + deps + type_deps + dev_deps + [
+    ] + [
         "//:package.json",
-        "//:tsconfig.json",
-    ],
-    entry_point = "//:index.js",
+        "//:.env",
+        "//:start.sh"
+    ] + deps + type_deps + dev_deps,
 )
 
 container_image(
     name="docker_image",
     base="@base_node//image",
+    data_path="/usr/src/app",
     directory="/usr/src/app",
     files = [":image"],
-    entrypoint = ["//:index.js"],
+    entrypoint = ["sh","/usr/src/app/start.sh"],
     ports=["3014"],
+    user = "root",
     volumes=["./graphql_hov_be_onboarding:/usr/src/app"],
     workdir="/usr/src/app",
+    stamp = True
 )
 
