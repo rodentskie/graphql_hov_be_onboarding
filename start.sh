@@ -2,6 +2,7 @@
 
 if [ -d "./build" ] 
 then
+    cd build
     npm install
     node build/index
 else
