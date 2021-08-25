@@ -1,9 +1,8 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin", "nodejs_test", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "nodejs_test", "npm_package_bin")
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
 package(default_visibility = ["//visibility:public"])
-
 
 deps = [
     "@npm//@graphql-tools/schema",
@@ -58,7 +57,7 @@ dev_deps = [
 
 ts_config(
     name = "config",
-    src = "tsconfig.json"
+    src = "tsconfig.json",
 )
 
 ts_project(
@@ -96,33 +95,32 @@ npm_package_bin(
 sources = glob(
     [
         "**/*.ts",
-    ]
+    ],
 )
+
 tests = glob(
     [
-        "**/*.spec.ts"
+        "**/*.spec.ts",
     ],
 )
 
 nodejs_test(
     name = "test",
     chdir = package_name(),
-    entry_point = "@npm//:node_modules/mocha/bin/mocha",
-    data = sources +  deps + type_deps + dev_deps + [
+    data = sources + deps + type_deps + dev_deps + [
         "//:package.json",
         "//:tsconfig.json",
         "//:tests/.mocharc.json",
     ],
+    entry_point = "@npm//:node_modules/mocha/bin/mocha",
     templated_args = ["$$(rlocation $(rootpath %s))" % s for s in tests] + [
         "--require mocha",
         "--require ts-node/register",
         "TS_NODE_PROJECT=tsconfig.json",
         "mocha --config tests/.mocharc.json -r",
-        "ts-node/register \"./**/*.spec.ts\""
+        "ts-node/register \"./**/*.spec.ts\"",
     ],
 )
-
-
 
 js_library(
     name = "image",
@@ -132,22 +130,24 @@ js_library(
     ] + [
         "//:package.json",
         "//:.env",
-        "//:start.sh"
+        "//:start.sh",
     ] + deps + type_deps + dev_deps,
 )
 
 container_image(
-    name="docker_image",
-    base="@base_node//image",
-    data_path="/usr/src/app",
-    directory="/usr/src/app",
+    name = "docker_image",
+    base = "@base_node//image",
+    data_path = "/usr/src/app",
+    directory = "/usr/src/app",
+    entrypoint = [
+        "sh",
+        "/usr/src/app/start.sh",
+    ],
     files = [":image"],
-    entrypoint = ["sh","/usr/src/app/start.sh"],
-    ports=["3014"],
-    user = "root",
-    volumes=["./graphql_hov_be_onboarding:/usr/src/app"],
-    workdir="/usr/src/app",
+    ports = ["3014"],
+    repository = "bazel/graphql_be_onboarding",
     stamp = True,
-    repository = "bazel/graphql_be_onboarding"
+    user = "root",
+    volumes = ["./graphql_hov_be_onboarding:/usr/src/app"],
+    workdir = "/usr/src/app",
 )
-
