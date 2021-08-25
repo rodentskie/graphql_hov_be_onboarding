@@ -1,0 +1,92 @@
+---
+name: master
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  target:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - uses: actions/cache@v2
+        with:
+          path: affected
+          key: affected-${{ github.sha }}
+      - uses: actions/cache@v2
+        env:
+          cache-name: bazel
+        with:
+          path: ~/.cache/bazelisk
+          key: ${{ env.cache-name }}-${{ runner.os }}
+          restore-keys: |
+            ${{ env.cache-name }}-${{ runner.os }}
+      - run: npm install -g @bazel/bazelisk
+      - run: bash scripts/buildables.sh
+
+  test:
+    needs:
+      - target
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:4.4.4-bionic
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - uses: actions/cache@v2
+        with:
+          path: affected
+          key: affected-${{ github.sha }}
+      - uses: actions/cache@v2
+        env:
+          cache-name: bazel-test
+        with:
+          path: ~/.cache/bazelisk
+          key: ${{ env.cache-name }}-${{ runner.os }}
+          restore-keys: |
+            ${{ env.cache-name }}-${{ runner.os }}
+      - run: npm install -g @bazel/bazelisk
+      - run: bash scripts/lint.sh
+      - run: bash scripts/test.sh
+
+  build:
+    needs:
+      - target
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - uses: actions/cache@v2
+        with:
+          path: affected
+          key: affected-${{ github.sha }}
+      - uses: actions/cache@v2
+        env:
+          cache-name: bazel
+        with:
+          path: ~/.cache/bazelisk
+          key: ${{ env.cache-name }}-${{ runner.os }}
+          restore-keys: |
+            ${{ env.cache-name }}-${{ runner.os }}
+      - run: npm install -g @bazel/bazelisk
+      - run: bash scripts/build.sh
+      - run: bash scripts/docker.sh
