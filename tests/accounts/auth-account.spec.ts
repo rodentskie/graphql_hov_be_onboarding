@@ -1,8 +1,8 @@
-import { expect } from "chai";
-import request from "supertest";
-import server from "../../index";
-import { dummyAccount } from "../generators/account-generator";
-import AccountModel from "../../models/accounts";
+import { expect } from 'chai';
+import request from 'supertest';
+import server from '../../index';
+import { dummyAccount } from '../generators/account-generator';
+import AccountModel from '../../models/accounts';
 
 const signUpMutation = `
     mutation($input:SignUpInput!) {
@@ -23,11 +23,11 @@ after(async () => {
   await AccountModel.deleteMany();
 });
 
-describe("Authenticate account test suite.", () => {
-  it("Successful authenticate.", async () => {
+describe('Authenticate account test suite.', () => {
+  it('Successful authenticate.', async () => {
     const data = dummyAccount();
     await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: signUpMutation,
         variables: {
@@ -38,7 +38,7 @@ describe("Authenticate account test suite.", () => {
       });
 
     const res = await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: authenticatepMutation,
         variables: {
@@ -49,14 +49,14 @@ describe("Authenticate account test suite.", () => {
         },
       });
 
-    expect(res.body.data.authenticate).to.have.property("token");
+    expect(res.body.data.authenticate).to.have.property('token');
   });
 
-  it("Authentication fail password invalid.", async () => {
+  it('Authentication fail password invalid.', async () => {
     const data = dummyAccount();
 
     await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: signUpMutation,
         variables: {
@@ -67,7 +67,7 @@ describe("Authenticate account test suite.", () => {
       });
 
     const res = await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: authenticatepMutation,
         variables: {
@@ -77,14 +77,14 @@ describe("Authenticate account test suite.", () => {
           },
         },
       });
-    expect(res.body.errors[0].message).to.equal("Invalid credentials.");
+    expect(res.body.errors[0].message).to.equal('Invalid credentials.');
   });
 
-  it("Authentication fail email invalid.", async () => {
+  it('Authentication fail email invalid.', async () => {
     const data = dummyAccount();
 
     await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: signUpMutation,
         variables: {
@@ -95,7 +95,7 @@ describe("Authenticate account test suite.", () => {
       });
 
     const res = await request(server)
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: authenticatepMutation,
         variables: {
@@ -105,6 +105,6 @@ describe("Authenticate account test suite.", () => {
           },
         },
       });
-    expect(res.body.errors[0].message).to.equal("Invalid credentials.");
+    expect(res.body.errors[0].message).to.equal('Invalid credentials.');
   });
 });

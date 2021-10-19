@@ -1,27 +1,29 @@
-import { UserInputError } from "apollo-server-errors";
-import { generateId, EntityType } from "../../functions/generate-binary-id";
-import AccountModel from "../../models/accounts";
-import { encrypt, compareData } from "../../functions/secure-data";
-import { generateToken } from "../../functions/create-token";
+import { UserInputError } from 'apollo-server-errors';
+import { generateId, EntityType } from '../../functions/generate-binary-id';
+import AccountModel from '../../models/accounts';
+import { encrypt, compareData } from '../../functions/secure-data';
+import { generateToken } from '../../functions/create-token';
 import {
   SignUpInput,
   AuthenticateInput,
   Account,
   PrivateContext,
-} from "../../types/accounts-types";
+} from '../../types/accounts-types';
 
 export const AccountResolver = {
   Mutation: {
     signUp: async (_: never, data: SignUpInput) => {
       const { input } = data;
-      const { emailAddress, firstName, lastName, password } = input;
+      const {
+        emailAddress, firstName, lastName, password,
+      } = input;
       const id = generateId(EntityType.Account);
 
       const emailExists = await AccountModel.exists({
         emailAddress,
       });
 
-      if (emailExists) throw new UserInputError("Email address already used.");
+      if (emailExists) throw new UserInputError('Email address already used.');
 
       const user = await AccountModel.create({
         id,
@@ -42,14 +44,14 @@ export const AccountResolver = {
         emailAddress,
       });
 
-      if (!accountData) throw new UserInputError("Invalid credentials.");
+      if (!accountData) throw new UserInputError('Invalid credentials.');
 
       const isCorrectPassword = await compareData(
         password,
-        accountData.password
+        accountData.password,
       );
 
-      if (!isCorrectPassword) throw new UserInputError("Invalid credentials.");
+      if (!isCorrectPassword) throw new UserInputError('Invalid credentials.');
 
       const token = generateToken(accountData);
 

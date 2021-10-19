@@ -32,7 +32,8 @@
     "build": "npx rimraf build/ && tsc",
     "start": "node build/index",
     "test": "TS_NODE_PROJECT=tsconfig.json mocha --config tests/.mocharc.json -r  ts-node/register \"./**/*.spec.ts\"",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.1.5",

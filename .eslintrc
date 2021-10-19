@@ -1,45 +1,46 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier", "import"],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
+  "plugins": ["@typescript-eslint", "import"],
   "extends": [
-    "airbnb-typescript/base",
+    "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier"
+    "plugin:import/typescript"
   ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "env": {
     "node": true,
     "mocha": true
   },
   "rules": {
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never"
-      }
-    ],
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/prefer-interface": "off",
+    "max-len": ["error", 128],
+    "import/extensions": "off",
     "func-names": "off",
-    "class-methods-use-this": "off",
-    "no-useless-constructor": "off",
-    "no-console": "off",
-    "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-useless-constructor": "off",
+    "semi": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "import/no-extraneous-dependencies": "off",
+    "@typescript-eslint/semi": ["error"],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "import/prefer-default-export": "off",
-    "no-underscore-dangle": "off",
+    "@typescript-eslint/ban-types": "off",
+    "class-methods-use-this": "off",
+    "object-curly-spacing": "off",
+    "import/no-unresolved": "off",
+    "import/no-useless-path-segments": "off",
+    "import/no-duplicates": "off",
+    "import/order": "off",
+    "import/no-self-import": "off",
+    "import/no-cycle": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
     "no-useless-escape": "off",
+    "no-underscore-dangle": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ]
+    "no-console": "off",
+    "@typescript-eslint/object-curly-spacing": ["error", "always"]
   }
 }

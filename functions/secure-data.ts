@@ -1,5 +1,5 @@
-import { hash, compare, genSalt } from "bcrypt";
-import dotenv from "dotenv";
+import { hash, compare, genSalt } from 'bcrypt';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -8,7 +8,6 @@ const encrypt = async (str: string) => {
   return hash(str, salt);
 };
 
-const compareData = async (data: string, hashed: string) =>
-  compare(data, hashed);
+const compareData = async (data: string, hashed: string) => compare(data, hashed);
 
 export { encrypt, compareData };

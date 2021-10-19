@@ -1,7 +1,7 @@
-import { Context } from "koa";
-import { UserInputError } from "apollo-server-errors";
-import r from "ramda";
-import { generateId, EntityType } from "../../functions/generate-binary-id";
+import { Context } from 'koa';
+import { UserInputError } from 'apollo-server-errors';
+import r from 'ramda';
+import { generateId, EntityType } from '../../functions/generate-binary-id';
 import {
   CreateProductInput,
   DeleteProductInput,
@@ -9,10 +9,10 @@ import {
   ProductQueryParams,
   LooseObject,
   Product,
-} from "../../types/products-types";
-import ProductModel from "../../models/products";
-import { Account } from "../../types/accounts-types";
-import { covertToQueryFilter } from "../helpers/convert-to-query";
+} from '../../types/products-types';
+import ProductModel from '../../models/products';
+import { Account } from '../../types/accounts-types';
+import { covertToQueryFilter } from '../helpers/convert-to-query';
 
 export const ProductResolver = {
   Query: {
@@ -33,16 +33,15 @@ export const ProductResolver = {
         sort,
       };
 
-      if (options.sort)
-        options.sort.name = options.sort.name === 1 ? "asc" : "desc";
+      if (options.sort) options.sort.name = options.sort.name === 1 ? 'asc' : 'desc';
 
       const queryFilter = covertToQueryFilter(filter);
 
       if (!after) {
         if (!options.sort) options.sort = {};
-        options.sort.createdAt = "asc";
+        options.sort.createdAt = 'asc';
         product = await ProductModel.find({}, null, options).where(
-          queryFilter!
+          queryFilter!,
         );
       }
 
@@ -52,7 +51,7 @@ export const ProductResolver = {
             cursor: { $gte: after },
           },
           null,
-          options
+          options,
         ).where(queryFilter!);
       }
       if (product.length === 0) {
@@ -75,7 +74,7 @@ export const ProductResolver = {
             node: item,
             cursor: item.cursor,
           }),
-          product
+          product,
         ),
         pageInfo: {
           hasNextPage,
@@ -117,7 +116,7 @@ export const ProductResolver = {
     deleteProduct: async (
       _: never,
       data: DeleteProductInput,
-      ctx: Context
+      ctx: Context,
     ): Promise<boolean> => {
       const user: Account = ctx.data;
 
@@ -130,7 +129,7 @@ export const ProductResolver = {
         owner: user.id,
       });
 
-      if (!product) throw new UserInputError("Product not found.");
+      if (!product) throw new UserInputError('Product not found.');
 
       const del = await product.remove();
       if (del) bool = true;
@@ -140,23 +139,22 @@ export const ProductResolver = {
     updateProduct: async (
       _: never,
       data: UpdateProductInput,
-      ctx: Context
+      ctx: Context,
     ): Promise<Product | null> => {
       const user: Account = ctx.data;
       const { input } = data;
       const { id, body } = input;
       const { name, description } = body;
 
-      if (name === "") throw new UserInputError("Please enter product name.");
-      if (description === "")
-        throw new UserInputError("Please enter product description.");
+      if (name === '') throw new UserInputError('Please enter product name.');
+      if (description === '') throw new UserInputError('Please enter product description.');
 
       const product = await ProductModel.findOne({
         id,
         owner: user.id,
       });
 
-      if (!product) throw new UserInputError("Product does not exist");
+      if (!product) throw new UserInputError('Product does not exist');
 
       if (name) {
         const entityId = generateId(EntityType.Product);

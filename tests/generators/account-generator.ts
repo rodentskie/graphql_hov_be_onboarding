@@ -1,7 +1,7 @@
-import { internet, name } from "faker";
-import request from "supertest";
-import { SignUpInput } from "../../types/accounts-types";
-import server from "../../index";
+import { internet, name } from 'faker';
+import request from 'supertest';
+import { SignUpInput } from '../../types/accounts-types';
+import server from '../../index';
 
 const dummyAccount = () => {
   const data: SignUpInput = {
@@ -26,7 +26,7 @@ const getToken = async (): Promise<string> => {
 
   const data = dummyAccount();
   const res = await request(server)
-    .post("/graphql")
+    .post('/graphql')
     .send({
       query: signUpMutation,
       variables: {

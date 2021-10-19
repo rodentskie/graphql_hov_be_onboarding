@@ -38,4 +38,6 @@ interface PrivateContext {
   data: Account;
 }
 
-export { SignUpInput, AuthenticateInput, Account, Me, PrivateContext };
+export {
+  SignUpInput, AuthenticateInput, Account, Me, PrivateContext,
+};

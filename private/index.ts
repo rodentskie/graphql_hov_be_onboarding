@@ -1,16 +1,16 @@
-import { SchemaDirectiveVisitor } from "@graphql-tools/utils";
+import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
 import {
   DirectiveLocation,
   GraphQLDirective,
   defaultFieldResolver,
-} from "graphql";
-import { Context } from "koa";
-import { AuthenticationError } from "apollo-server-errors";
-import { Me } from "../types/accounts-types";
-import { validateToken } from "../middlewares/validate-token";
+} from 'graphql';
+import { Context } from 'koa';
+import { AuthenticationError } from 'apollo-server-errors';
+import { Me } from '../types/accounts-types';
+import { validateToken } from '../middlewares/validate-token';
 
 class IsPrivateDirective extends SchemaDirectiveVisitor {
-  static getDirectiveDeclaration(directiveName = "private") {
+  static getDirectiveDeclaration(directiveName = 'private') {
     return new GraphQLDirective({
       name: directiveName,
       locations: [DirectiveLocation.FIELD_DEFINITION, DirectiveLocation.OBJECT],
@@ -24,11 +24,10 @@ class IsPrivateDirective extends SchemaDirectiveVisitor {
       root: Record<string, unknown>,
       args: Record<string, unknown>,
       context: Context,
-      info: Record<string, unknown>
+      info: Record<string, unknown>,
     ) => {
       const auth: string = context.request.header.authorization!;
-      if (!auth)
-        throw new AuthenticationError("Invalid authentication header.");
+      if (!auth) throw new AuthenticationError('Invalid authentication header.');
       const user = validateToken(auth) as Me;
       const { data } = user;
       data.id = Buffer.from(data.id);

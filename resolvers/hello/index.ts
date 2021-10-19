@@ -1,5 +1,5 @@
 export const HelloWorldResolver = {
   Query: {
-    hello: (): string => "Hello World",
+    hello: (): string => 'Hello World',
   },
 };
