@@ -129,7 +129,6 @@ js_library(
         ":build",
     ] + [
         "//:package.json",
-        "//:.env",
         "//:start.sh",
     ] + deps + type_deps + dev_deps,
 )
