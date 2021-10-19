@@ -135,7 +135,7 @@ js_library(
 )
 
 container_image(
-    name = "docker_image",
+    name = "docker",
     base = "@base_node//image",
     data_path = "/usr/src/app",
     directory = "/usr/src/app",
