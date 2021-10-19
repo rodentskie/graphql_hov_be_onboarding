@@ -62,7 +62,6 @@ jobs:
           key: ${{ env.cache-name }}-${{ runner.os }}
           restore-keys: |
             ${{ env.cache-name }}-${{ runner.os }}
-      - run: npm install -g @bazel/bazelisk
       - run: bash scripts/lint.sh
       - run: bash scripts/test.sh
 
@@ -87,6 +86,5 @@ jobs:
           key: ${{ env.cache-name }}-${{ runner.os }}
           restore-keys: |
             ${{ env.cache-name }}-${{ runner.os }}
-      - run: npm install -g @bazel/bazelisk
       - run: bash scripts/build.sh
       - run: bash scripts/docker.sh
