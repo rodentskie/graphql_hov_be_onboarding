@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const dbConn = () => {
-  const uri: string = process.env.MONGO_URI || 'mongodb://localhost/onboarding_graphql_test';
+  const uri: string = process.env.MONGO_URI || 'mongodb://root:superpw64@mongo:27017/onboarding_graphql_test?authSource=admin';
 
   const db = connect(uri, {
     useNewUrlParser: true,

@@ -8,6 +8,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3014
+EXPOSE ${PORT}
 
 CMD ["npm", "start"]

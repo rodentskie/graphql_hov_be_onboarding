@@ -1,18 +1,19 @@
-import 'reflect-metadata';
-import { ApolloServer } from 'apollo-server-koa';
-import dotenv from 'dotenv';
-import Koa from 'koa';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { dbConn } from './data/index';
-import { typeDefs } from './schema/typeDefs/index';
+import "reflect-metadata";
+import { ApolloServer } from "apollo-server-koa";
+import dotenv from "dotenv";
+import Koa from "koa";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { dbConn } from "./data/index";
+import { typeDefs } from "./schema/typeDefs/index";
 import {
   HelloWorldResolver,
   AccountResolver,
   ProductResolver,
   ScalarResolver,
   NodeResolver,
-} from './resolvers/index';
-import IsPrivateDirective from './private/index';
+} from "./resolvers/index";
+import IsPrivateDirective from "./private/index";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 dotenv.config();
 
@@ -32,7 +33,10 @@ const apolloServer = new ApolloServer({
       private: IsPrivateDirective,
     },
   }),
-  context: ({ ctx }) => ctx,
+  context: ({ ctx }) => {
+    return ctx;
+  },
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground],
 });
 
 (async () => {
@@ -46,7 +50,7 @@ const port = process.env.PORT || 5000;
 
 const server = app.listen(port, () => {
   console.log(
-    `🚀⚙️  Server ready at http://localhost:${port}${apolloServer.graphqlPath}`,
+    `🚀⚙️  Server ready at http://localhost:${port}${apolloServer.graphqlPath}`
   );
 });
 

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-deployment
+  labels:
+    app: graphql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphql
+  template:
+    metadata:
+      labels:
+        app: graphql
+    spec:
+      containers:
+      - name: graphql-be
+        image: rodentskie/graphql_kubectl_test:0.1.2
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          valueFrom: 
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-uri
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-service
+spec:
+  type: NodePort
+  selector:
+    app: graphql
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30100
