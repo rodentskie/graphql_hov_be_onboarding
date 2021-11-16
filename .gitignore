@@ -127,3 +127,7 @@ build/
 
 bazel-*
 affected
+
+
+infra/eks/.terraform*
+infra/eks/*.tfstate*
