@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { GraphQLScalarType } from 'graphql';
 
 const BinaryResolver = new GraphQLScalarType({

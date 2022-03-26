@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { SchemaDirectiveVisitor } from '@graphql-tools/utils';
 import {
   DirectiveLocation,
