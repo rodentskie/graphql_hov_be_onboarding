@@ -1,8 +1,8 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "directories": {
-    "start": "npm start"
+  "scripts": {
+    "start": "node index"
   },
   "dependencies": {
     "@graphql-tools/schema": "^7.1.5",

@@ -57,7 +57,7 @@ dev_deps = [
 
 ts_config(
     name = "config",
-    src = "tsconfig.json",
+    src = ":tsconfig.json",
 )
 
 ts_project(
@@ -71,8 +71,9 @@ ts_project(
     ),
     declaration = True,
     declaration_map = True,
+    extends = "//:tsconfig.json",
     source_map = True,
-    tsconfig = "tsconfig.json",
+    tsconfig = ":config",
     deps = deps + type_deps + dev_deps,
 )
 
@@ -110,7 +111,7 @@ nodejs_test(
     data = sources + deps + type_deps + dev_deps + [
         "//:package.json",
         "//:tsconfig.json",
-        "//:tests/.mocharc.json",
+        ":tests/.mocharc.json",
     ],
     entry_point = "@npm//:node_modules/mocha/bin/mocha",
     templated_args = ["$$(rlocation $(rootpath %s))" % s for s in tests] + [
@@ -124,29 +125,28 @@ nodejs_test(
 
 js_library(
     name = "image",
-    package_name = "@bazel/graphql",
     srcs = [
         ":build",
-    ] + [
-        "//:package.json",
-        "//:start.sh",
-    ] + deps + type_deps + dev_deps,
+    ],
 )
 
 container_image(
     name = "docker",
     base = "@base_node//image",
-    data_path = "/usr/src/app",
+    data_path = ".",
     directory = "/usr/src/app",
     entrypoint = [
         "sh",
         "/usr/src/app/start.sh",
     ],
-    files = [":image"],
-    ports = ["3014"],
+    files = [
+        ":image",
+        ":package.json",
+        ":start.sh",
+    ],
+    ports = ["5000"],
     repository = "bazel/graphql_be_onboarding",
     stamp = True,
     user = "root",
-    volumes = ["./graphql_hov_be_onboarding:/usr/src/app"],
     workdir = "/usr/src/app",
 )

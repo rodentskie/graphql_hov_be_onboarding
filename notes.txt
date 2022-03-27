@@ -1,0 +1,4 @@
+# run api
+
+docker run -p 5000:5000 --name api -d -e MONGO_URI=mongodb://mongo:27017/onboarding_graphql \
+--link mongo:mongo bazel/graphql_be_onboarding/api:docker
