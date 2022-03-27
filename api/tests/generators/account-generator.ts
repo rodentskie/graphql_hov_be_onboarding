@@ -1,7 +1,7 @@
 import { internet, name } from 'faker';
 import request from 'supertest';
 import { SignUpInput } from '../../types/accounts-types';
-import server from '../../index';
+import { server } from '../../index';
 
 const dummyAccount = () => {
   const data: SignUpInput = {

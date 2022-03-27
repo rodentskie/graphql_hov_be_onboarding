@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import request from 'supertest';
-import server from '../../index';
+import { server } from '../../index';
 import { dummyAccount } from '../generators/account-generator';
 import AccountModel from '../../models/accounts';
 
