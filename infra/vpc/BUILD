@@ -1,3 +1,5 @@
+load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+
 package(default_visibility = ["//visibility:public"])
 
 type_deps = [
@@ -18,7 +20,12 @@ deps = [
     "@npm//constructs",
 ]
 
-genrule(
+ts_config(
+    name = "config",
+    src = ":tsconfig.json",
+)
+
+ts_project(
     name = "build",
     srcs = glob(
         ["**/*.ts"],
@@ -27,61 +34,14 @@ genrule(
             "__tests__/**/*.*",
             "node_modules/**/*.*",
         ],
-    ) + [
-        ":package.json",
-        ":cdktf.json",
-        "//:tsconfig.json",
-        ":tsconfig.json",
-    ] + deps + dev_deps + type_deps,
-    outs = [".build-logs"],
-    cmd = "bash $(location scripts/build.sh) > \"$@\"",
-    local = True,
-    tools = ["scripts/build.sh"],
+    ),
+    declaration = True,
+    declaration_map = True,
+    extends = "//:tsconfig.json",
+    source_map = True,
+    tsconfig = ":config",
+    deps = deps + type_deps + dev_deps,
 )
-
-# genrule(
-#     name = "deploy",
-#     srcs = glob(
-#         ["**/*.ts"],
-#         exclude = [
-#             "**/*spec.ts",
-#             "__tests__/**/*.*",
-#             "node_modules/**/*.*",
-#         ],
-#     ) + [
-#         ":package.json",
-#         ":cdktf.json",
-#         "//:tsconfig.json",
-#         ":tsconfig.json",
-#     ] + deps + dev_deps + type_deps,
-#     outs = ["show_logs_deploy.sh"],
-#     cmd = "bash $(location scripts/deploy.sh) > \"$@\"",
-#     executable = True,
-#     local = True,
-#     tools = ["scripts/deploy.sh"],
-# )
-
-# genrule(
-#     name = "destroy",
-#     srcs = glob(
-#         ["**/*.ts"],
-#         exclude = [
-#             "**/*spec.ts",
-#             "__tests__/**/*.*",
-#             "node_modules/**/*.*",
-#         ],
-#     ) + [
-#         ":package.json",
-#         ":cdktf.json",
-#         "//:tsconfig.json",
-#         ":tsconfig.json",
-#     ] + deps + dev_deps + type_deps,
-#     outs = ["show_logs_destroy.sh"],
-#     cmd = "bash $(location scripts/destroy.sh) > \"$@\"",
-#     executable = True,
-#     local = True,
-#     tools = ["scripts/destroy.sh"],
-# )
 
 sh_binary(
     name = "deploy",
@@ -116,18 +76,3 @@ sh_binary(
         ":tsconfig.json",
     ] + deps,
 )
-
-# sh_binary(
-#     name = "destroy",
-#     srcs = ["scripts/destroy.sh"],
-#     data = glob(
-#         ["**/*.ts"],
-#         exclude = [
-#             "__tests__/**/*.*",
-#             "node_modules/**/*.*",
-#         ],
-#     ) + [
-#         ":package.json",
-#         ":cdktf.json",
-#     ] + deps,
-# )

@@ -3,8 +3,9 @@
 set -e
 
 WORK_DIR=$(pwd)
-MAIN_PATH="$WORK_DIR/infra/eip"
+MAIN_PATH="$WORK_DIR/infra/vpc"
 
 cd "$MAIN_PATH"
 
-cdktf deploy --auto-approve
+npm run deploy
+cat cdktf.log
