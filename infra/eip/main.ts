@@ -3,8 +3,6 @@ import { App, TerraformStack, S3Backend, TerraformOutput } from "cdktf";
 import { AwsProvider, ec2 } from "@cdktf/provider-aws";
 
 class EipStack extends TerraformStack {
-  public id: string;
-
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -21,10 +19,8 @@ class EipStack extends TerraformStack {
       },
     });
 
-    this.id = eip.id;
-
     new TerraformOutput(this, "eip_id", {
-      value: this.id,
+      value: eip.id,
     });
 
     new S3Backend(this, {
@@ -32,10 +28,6 @@ class EipStack extends TerraformStack {
       key: "cdktf/eip.json",
       region: "ap-southeast-1",
     });
-  }
-
-  public getId() {
-    return this.id;
   }
 }
 

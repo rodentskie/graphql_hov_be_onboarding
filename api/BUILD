@@ -1,6 +1,6 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "js_library", "nodejs_test", "npm_package_bin")
 load("@npm//@bazel/typescript:index.bzl", "ts_config", "ts_project")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -150,4 +150,13 @@ container_image(
     stamp = True,
     user = "root",
     workdir = "/usr/src/app",
+)
+
+container_push(
+    name = "docker_push",
+    format = "Docker",
+    image = ":docker",
+    registry = "663242346353.dkr.ecr.ap-southeast-1.amazonaws.com",
+    repository = "rod-test",
+    tag = "001",
 )
