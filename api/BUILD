@@ -23,6 +23,7 @@ deps = [
     "@npm//ramda",
     "@npm//reflect-metadata",
     "@npm//supertest",
+    "@npm//serverless-http",
 ]
 
 type_deps = [
