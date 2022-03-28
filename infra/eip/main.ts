@@ -24,7 +24,7 @@ class EipStack extends TerraformStack {
     this.id = eip.id;
 
     new TerraformOutput(this, "eip_id", {
-      value: eip.id,
+      value: this.id,
     });
 
     new S3Backend(this, {

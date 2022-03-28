@@ -1,0 +1,11 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "b00b7a90-35a6-4cab-8b90-c7f84cfc91cd",
+  "terraformProviders": ["mongodb/mongodbatlas@ ~> 1.3.0"],
+  "terraformModules": [],
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}
