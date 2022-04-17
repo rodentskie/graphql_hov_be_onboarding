@@ -131,3 +131,5 @@ affected
 
 infra/eks/.terraform*
 infra/eks/*.tfstate*
+
+api/.build

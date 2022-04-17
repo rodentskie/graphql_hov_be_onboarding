@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
-import { App, TerraformStack, S3Backend } from "cdktf";
+import { App, TerraformStack, S3Backend, TerraformOutput } from "cdktf";
 import { Vpc } from "./.gen/modules/terraform-aws-modules/aws/vpc";
-import { AwsProvider, ec2 } from "@cdktf/provider-aws";
+import { AwsProvider, vpc, ec2 } from "@cdktf/provider-aws";
 import { datasources } from "./.gen/providers/aws";
 
 class VpcStack extends TerraformStack {
@@ -54,6 +54,25 @@ class VpcStack extends TerraformStack {
         "kubernetes.io/role/internal-elb": "1",
         Environment: "dev",
       },
+    });
+
+    const securityGroup = new vpc.SecurityGroup(this, "mongodb_port", {
+      namePrefix: "mongodb_port",
+      vpcId: this.vpc.vpcIdOutput,
+
+      egress: [
+        {
+          fromPort: 27017,
+          toPort: 27017,
+          protocol: "tcp",
+
+          cidrBlocks: ["0.0.0.0/0"],
+        },
+      ],
+    });
+
+    new TerraformOutput(this, "security_group_id", {
+      value: securityGroup.id,
     });
 
     new S3Backend(this, {

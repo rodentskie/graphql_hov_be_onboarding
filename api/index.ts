@@ -39,7 +39,7 @@ const apolloServer = new ApolloServer({
 
 (async () => {
   await dbConn();
-
+  console.log("With connection.");
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
 })();
