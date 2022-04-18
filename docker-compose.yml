@@ -7,3 +7,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    network_mode: default
+networks:
+  default:
+    external:
+      name: bridge
